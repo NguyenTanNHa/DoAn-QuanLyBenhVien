@@ -1,0 +1,257 @@
+﻿@model HospitalManagementSystem.Models.MedicationSearchViewModel
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+            <img src="~/images/bv4.jpg" alt="Logo" class="logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Introduce" asp-action="GioiThieu">Giới thiệu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Doctor" asp-action="Index">Chuyên khoa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="PatientsKhach" asp-action="Create">Tạo hồ sơ khám bệnh</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Medication" asp-action="Pharmacity">Đặt thuốc online</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#">Tin tức</a></li>
+
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<h1>Mua Thuốc</h1>
+<!-- Biểu tượng giỏ hàng với số lượng sản phẩm -->
+<!-- Biểu tượng giỏ hàng -->
+<div id="cart" class="cart-icon-container">
+    <a href="@Url.Action("ViewCart", "Medication")" class="cart-icon-button btn btn-danger">
+        <span class="cart-icon-text">Giỏ hàng</span>
+        <span id="cart-count" class="cart-count">0</span>
+    </a>
+</div>
+
+<div class="search-bar">
+    <form asp-action="Pharmacity" method="get">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Tìm kiếm thuốc..." class="form-control" />
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+</div>
+
+
+
+<div class="medication-container">
+    @if (Model.Medications != null && Model.Medications.Any())
+    {
+        @foreach (var medication in Model.Medications)
+        {
+            <div class="medication-card">
+                <img src="@Url.Content($"/images/Medication/{medication.MedicationImage}")" alt="Hình ảnh thuốc" class="medication-image" />
+                <div class="medication-info">
+                    <h3>@medication.MedicationName</h3>
+                    <p>@medication.DescriptionMedications</p>
+                    <p><strong>Giá:</strong> @medication.FeeMedication</p>
+                    <p><strong>Tình trạng:</strong> @medication.StatusMedication</p>
+                    <p><strong>Liều dùng:</strong> @medication.Dosage</p>
+                    <div class="action-buttons">
+                        @if (medication.StatusMedication == "Còn hàng")
+                        {
+                            <a href="@Url.Action("Checkout", "Medication", new { medicationId = medication.MedicationId })"
+                               class="btn btn-primary">Mua ngay</a>
+                            <button type="button" class="btn btn-secondary" onclick="addToCart(@medication.MedicationId)">
+                                Thêm vào giỏ hàng
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled style="pointer-events: none; opacity: 0.5;">Hết hàng</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Không tìm thấy thuốc phù hợp.</p>
+    }
+</div>
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+@section Scripts {
+    <script>
+        function addToCart(medicationId) {
+            $.post('@Url.Action("AddToCart", "Medication")', { medicationId: medicationId }, function (data) {
+                // Cập nhật số lượng sản phẩm trong giỏ hàng
+                $('#cart-count').text(data.cartCount);
+            });
+        }
+
+
+    </script>
+}
+<br>
+<br>
+<footer class="footer">
+    <div>
+        <h3>TP. Hà Nội</h3>
+        <p><strong>Địa chỉ:</strong> 458/3F Nguyễn Hữu Thọ, P. Tân Hưng, Quận 7, TP.HCM</p>
+        <p><strong>Số điện thoại:</strong> 19002039</p>
+    </div>
+    <div>
+        <h3>TP. Hồ Chí Minh</h3>
+        <p><strong>Địa chỉ:</strong> 300A – Nguyễn Tất Thành, Phường 13, Quận 4, TP. Hồ Chí Minh, Việt Nam</p>
+        <p><strong>Số điện thoại:</strong> 1900 2039</p>
+    </div>
+</footer>
+
+<style>
+    .navbar {
+        background-color: #0c2340;
+        padding: 10px 0;
+    }
+
+        .navbar .navbar-brand img {
+            width: 100px;
+            height: auto;
+            border-radius: 15px;
+        }
+
+    .navbar-nav {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+        .navbar-nav .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+            .navbar-nav .nav-link:hover {
+                text-decoration: underline;
+            }
+
+    .footer {
+        background-color: #0c2340;
+        color: #fff;
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+        text-align: center;
+    }
+
+        .footer h3 {
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+    .rounded-image {
+        width: 550px;
+        height: 330px;
+        border-radius: 15px;
+    }
+
+    .blur-background {
+        background-color: white;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        opacity: 0.9;
+        border-radius: 15px;
+        padding: 20px;
+    }
+    .medication-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .medication-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .medication-image {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .medication-info {
+        margin-top: 10px;
+        flex-grow: 1;
+    }
+
+        .medication-info h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .medication-info p {
+            margin-bottom: 5px;
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Giỏ hàng */
+    /* Giỏ hàng */
+    .cart-icon-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .cart-icon-button {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 16px;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .cart-icon-text {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .cart-count {
+        background-color: #dc3545;
+        color: #fff;
+        border-radius: 50%;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+</style>

@@ -1,0 +1,81 @@
+﻿@model HospitalManagementSystem.Data.Appointment
+
+@{
+    ViewData["Title"] = "Chi tiết Lịch hẹn";
+}
+
+<style>
+    /* Custom styles for layout and spacing */
+    .details-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin-bottom: 20px;
+    }
+
+    .btn-container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+        .btn-container a {
+            margin-right: 10px;
+        }
+</style>
+
+<div class="container details-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <div>
+        <h4 class="text-primary">Lịch hẹn</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">Mã Lịch hẹn</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.AppointmentId)
+            </dd>
+
+            <dt class="col-sm-3">Tên Bệnh nhân</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Patient.LastName) <!-- Hiển thị họ bệnh nhân -->
+            </dd>
+
+            <dt class="col-sm-3">Tên Bác sĩ</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Doctor.FullName) <!-- Hiển thị tên đầy đủ của bác sĩ -->
+            </dd>
+
+            <dt class="col-sm-3">Thời gian</dt>
+            <dd class="col-sm-9">
+                Ngày: @Html.DisplayFor(model => model.TimeSlot.Date) <!-- Hiển thị ngày -->
+                <br />
+                Giờ: @Html.DisplayFor(model => model.TimeSlot.Time) <!-- Hiển thị giờ -->
+            </dd>
+
+            <dt class="col-sm-3">Phí</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Fee)
+            </dd>
+
+            <dt class="col-sm-3">Ghi chú</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Notes)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="btn-container">
+        <a asp-action="Edit" asp-route-id="@Model?.AppointmentId" class="btn btn-primary">Chỉnh sửa</a>
+        <a asp-action="Index" class="btn btn-secondary">Trở về danh sách</a>
+    </div>
+</div>

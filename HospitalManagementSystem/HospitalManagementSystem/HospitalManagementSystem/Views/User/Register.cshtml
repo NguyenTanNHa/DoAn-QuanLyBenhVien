@@ -1,0 +1,208 @@
+﻿@model HospitalManagementSystem.Models.LoginVM
+
+@{
+    ViewData["Title"] = "ĐĂNG KÝ TÀI KHOẢN";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* Đảm bảo body và html chiếm toàn bộ chiều cao màn hình */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+        }
+
+        /* Vòng tròn mờ phía sau để tạo hiệu ứng nền */
+        .circle1, .circle2 {
+            position: absolute;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+        }
+
+        .circle1 {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -100px;
+        }
+
+        .circle2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -100px;
+        }
+
+        /* Form đăng nhập */
+        .card-container {
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            text-align: center;
+        }
+
+            /* Tiêu đề với hiệu ứng 3D */
+            .card-container h1 {
+                font-size: 36px;
+                font-weight: bold;
+                color: #007bff;
+                margin-bottom: 30px;
+                text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            .card-container h4 {
+                font-size: 18px;
+                color: #6c757d;
+                margin-bottom: 40px;
+            }
+
+            /* Form đăng nhập */
+            .card-container form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+        /* Các trường nhập liệu */
+        .form-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #495057;
+                font-weight: 500;
+                font-size: 16px;
+            }
+
+            .form-group input, .form-group select {
+                width: 100%;
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid #ced4da;
+                box-sizing: border-box;
+                font-size: 16px;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+                .form-group input:focus, .form-group select:focus {
+                    border-color: #007bff;
+                    box-shadow: 0 0 10px rgba(38, 143, 255, 0.2);
+                    outline: none;
+                }
+
+        /* Nút đăng nhập */
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            width: 100%;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            }
+
+        /* Liên kết bên dưới */
+        .form-group a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+
+            .form-group a:hover {
+                text-decoration: underline;
+            }
+
+        /* Nút trở về trang chủ */
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+                transform: scale(1.05);
+            }
+
+    </style>
+</head>
+<body>
+    <div class="circle1"></div>
+    <div class="circle2"></div>
+    <div class="card-container">
+        <h1>@ViewData["Title"]</h1>
+        <h4>ĐĂNG KÝ HỆ THỐNG</h4>
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label">Username</label>
+                <input asp-for="Username" class="form-control" placeholder="Enter your username" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PasswordAccount" class="control-label">Password</label>
+                <input asp-for="PasswordAccount" class="form-control" type="password" placeholder="Enter your password" />
+                <span asp-validation-for="PasswordAccount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Roles" class="control-label">Role</label>
+                <select asp-for="Roles" class="form-control">
+                    <option value="">-- Select Role --</option>
+                    <option value="admin">Admin</option>
+                    <option value="khach">Khach</option>
+                </select>
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn-primary">Tạo Tài Khoản</button>
+        </form>
+        <div class="form-group">
+            <a asp-action="Login">Đăng Nhập</a>
+        </div>
+        <a asp-action="Index" asp-controller="Home" class="btn-secondary">Back to Home</a>
+    </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</body>
+</html>
+
+
